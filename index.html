@@ -1,0 +1,636 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+
+/* ── Zone-tokens ────────────────────────────── */
+.dk{
+  --sep:   rgba(0,0,0,.08);
+  --sep-s: rgba(0,0,0,.05);
+}
+@media(prefers-color-scheme:dark){
+  .dk{ --sep:rgba(255,255,255,.1); --sep-s:rgba(255,255,255,.06); }
+}
+
+/* ── Reset ──────────────────────────────────── */
+.dk *{box-sizing:border-box;margin:0;padding:0;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;}
+.dk button{cursor:pointer;border:none;background:none;font-family:inherit;}
+
+/* ── Shell ──────────────────────────────────── */
+.dk-shell{padding:16px;background:var(--color-background-secondary);border-radius:var(--border-radius-lg);}
+.dk-app{
+  border-radius:14px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 0 0 1px rgba(0,0,0,.1),0 4px 16px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.06);
+}
+
+/* ── 1. Topbar ──────────────────────────────── */
+.dk-topbar{
+  background:linear-gradient(110deg,#063C31 0%,#085041 50%,#0A6952 100%);
+  padding:0 22px;height:50px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.dk-topbar-title{
+  font-size:14px;font-weight:600;color:#E1F5EE;
+  display:flex;align-items:center;gap:8px;letter-spacing:-.2px;
+}
+.dk-topbar-sub{font-size:11px;font-weight:500;color:#9FE1CB;letter-spacing:.4px;text-transform:uppercase;}
+
+/* ── 2. Menu — licht mintgroen ──────────────── */
+.dk-menu{
+  padding:13px 22px;
+  background:linear-gradient(180deg,#EEF9F3 0%,#E7F6EF 100%);
+  border-bottom:1px solid rgba(8,80,65,.12);
+  flex-shrink:0;
+}
+.dk-section-title{
+  font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;
+  color:#2E7A5C;margin-bottom:9px;
+}
+.dk-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.dk-pill{
+  font-size:12px;font-weight:500;padding:5px 13px;border-radius:20px;
+  border:1.5px solid transparent;transition:opacity .12s,transform .1s;line-height:1;
+}
+.dk-pill:hover{opacity:.75;transform:translateY(-1px);}
+.dk-pill:active{transform:translateY(0);}
+.dk-pill.g{border-color:#1D9E75;background:#DFF4EC;color:#085041;}
+.dk-pill.a{border-color:#EF9F27;background:#FDF0DC;color:#7A4500;}
+.dk-pill.p{border-color:#7F77DD;background:#EEEDFE;color:#312B85;}
+.dk-pill.c{border-color:#D85A30;background:#FDECEA;color:#6B2510;}
+.dk-pill.off{border-color:rgba(8,80,65,.2);background:rgba(255,255,255,.5);color:#5A7A6D;}
+
+/* ── 3. Hoofdgrid ───────────────────────────── */
+.dk-main{display:grid;grid-template-columns:1fr 310px;flex:1;}
+
+/* ── 3a. Web-paneel — wit, subtiele glow ──── */
+.dk-web{
+  background:radial-gradient(ellipse 75% 65% at 50% 42%,rgba(29,158,117,.07) 0%,transparent 100%),#FAFFFE;
+  padding:26px 28px 22px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.dk-canvas-box{width:100%;display:flex;justify-content:center;margin-bottom:10px;}
+#dk-canvas{width:100%;max-width:320px;display:block;}
+
+.dk-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px;border-radius:20px;
+  font-size:11.5px;font-weight:500;font-style:italic;
+  color:#085041;
+  background:linear-gradient(135deg,#DFF4EC,#C8EDE0);
+  border:1px solid rgba(29,158,117,.22);
+  box-shadow:0 1px 4px rgba(29,158,117,.15);
+  margin-bottom:18px;
+}
+
+.dk-insight{
+  width:100%;
+  padding:13px 16px;
+  background:#FFFFFF;
+  border:1px solid rgba(29,158,117,.2);
+  border-left:3px solid #1D9E75;
+  border-radius:0 8px 8px 0;
+  box-shadow:0 1px 5px rgba(0,0,0,.05);
+  font-size:13px;line-height:1.65;
+  color:var(--color-text-secondary);
+  margin-top:auto;
+}
+
+@media(prefers-color-scheme:dark){
+  .dk-web{background:radial-gradient(ellipse 75% 65% at 50% 42%,rgba(29,158,117,.1) 0%,transparent 100%),#0E1512;}
+  .dk-insight{background:rgba(8,80,65,.2);border-color:rgba(29,158,117,.3);}
+}
+
+/* ── 3b. Data-paneel — warm steengrijs ───── */
+.dk-data{
+  background:#F2F4F3;
+  border-left:1px solid var(--sep);
+  display:flex;flex-direction:column;
+}
+@media(prefers-color-scheme:dark){.dk-data{background:#141917;}}
+
+.dk-scores{padding:18px 18px 0;flex:1;}
+
+.dk-cat{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
+  margin-bottom:11px;padding-bottom:7px;
+  border-bottom:1px solid var(--sep);
+  display:flex;align-items:center;gap:7px;
+}
+.dk-cat-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.dk-bars{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.dk-bar-row{display:flex;align-items:center;gap:9px;}
+.dk-bar-lbl{font-size:12px;color:var(--color-text-secondary);white-space:nowrap;flex-shrink:0;}
+.dk-bar-track{
+  flex:1;min-width:20px;height:7px;
+  background:rgba(255,255,255,.75);
+  border-radius:4px;overflow:hidden;
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.1);
+}
+@media(prefers-color-scheme:dark){.dk-bar-track{background:rgba(255,255,255,.1);}}
+.dk-bar-fill{height:100%;border-radius:4px;transition:width .65s cubic-bezier(.34,1.2,.64,1);}
+.dk-bar-num{font-size:12px;font-weight:600;width:22px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
+
+/* ── 3c. Commitment — iets donkerder ───────── */
+.dk-commit{
+  background:#E8ECEA;
+  border-top:1px solid var(--sep);
+  padding:15px 18px;
+}
+@media(prefers-color-scheme:dark){.dk-commit{background:#0D1210;}}
+
+.dk-levels{display:flex;flex-direction:column;}
+.dk-level{display:flex;align-items:flex-start;gap:10px;padding:8px 0;}
+.dk-level+.dk-level{border-top:1px solid var(--sep-s);}
+.dk-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:3px;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.dk-lname{font-size:12px;font-weight:500;color:var(--color-text-primary);line-height:1.35;}
+.dk-lsub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;line-height:1.4;}
+
+/* ── 4. Coach-strip — groene tint, eigen sfeer */
+.dk-coach{
+  background:linear-gradient(180deg,#E4F2EB 0%,#DCF0E5 100%);
+  border-top:1px solid rgba(8,80,65,.15);
+  flex-shrink:0;
+}
+@media(prefers-color-scheme:dark){.dk-coach{background:linear-gradient(180deg,rgba(8,80,65,.3) 0%,rgba(8,80,65,.22) 100%);}}
+
+.dk-coach-head{
+  padding:9px 20px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(8,80,65,.12);
+}
+.dk-bot-av{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#1D9E75,#085041);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 1px 4px rgba(8,80,65,.3);
+}
+.dk-coach-name{font-size:13px;font-weight:600;color:#063C31;}
+@media(prefers-color-scheme:dark){.dk-coach-name{color:#9FE1CB;}}
+.dk-coach-sub{font-size:11px;color:#2E7A5C;margin-left:6px;}
+@media(prefers-color-scheme:dark){.dk-coach-sub{color:#6BBF9E;}}
+
+.dk-coach-body{display:grid;grid-template-columns:1fr 258px;}
+
+.dk-msgs{
+  padding:10px 14px;max-height:110px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:5px;
+}
+.dk-msg{display:flex;gap:6px;align-items:flex-start;}
+.dk-msg.user{flex-direction:row-reverse;}
+.dk-bbl{font-size:12.5px;line-height:1.5;padding:7px 11px;max-width:88%;}
+.dk-msg.bot .dk-bbl{
+  background:rgba(255,255,255,.8);
+  color:#1A3D2E;
+  border-radius:4px 12px 12px 12px;
+  box-shadow:0 1px 3px rgba(8,80,65,.1);
+}
+@media(prefers-color-scheme:dark){
+  .dk-msg.bot .dk-bbl{background:rgba(8,80,65,.35);color:#C8EDE0;}
+}
+.dk-msg.user .dk-bbl{background:#085041;color:#E1F5EE;border-radius:12px 4px 12px 12px;}
+.dk-av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dk-av.b{background:rgba(255,255,255,.6);color:#085041;}
+.dk-av.u{background:#085041;color:#E1F5EE;}
+
+/* Controls */
+.dk-ctrl{
+  background:rgba(8,80,65,.1);
+  border-left:1px solid rgba(8,80,65,.12);
+  padding:11px 13px;
+  display:flex;flex-direction:column;justify-content:space-between;gap:9px;
+}
+@media(prefers-color-scheme:dark){.dk-ctrl{background:rgba(8,80,65,.3);}}
+
+.dk-qlbl{font-size:10px;font-weight:700;color:#2E7A5C;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
+.dk-qrow{display:flex;gap:4px;flex-wrap:wrap;}
+.dk-qbtn{
+  font-size:11.5px;font-weight:500;
+  padding:4px 10px;border-radius:20px;
+  border:1px solid rgba(8,80,65,.2);
+  background:rgba(255,255,255,.6);
+  color:#085041;
+  transition:background .1s,box-shadow .1s;
+}
+.dk-qbtn:hover{background:#085041;color:#E1F5EE;border-color:#085041;}
+
+.dk-inp{display:flex;gap:6px;}
+.dk-inp input{
+  flex:1;min-width:0;font-size:12.5px;font-family:inherit;
+  padding:7px 11px;border-radius:8px;
+  border:1px solid rgba(8,80,65,.2);
+  background:rgba(255,255,255,.7);
+  color:var(--color-text-primary);outline:none;
+  transition:border-color .15s,background .15s,box-shadow .15s;
+}
+.dk-inp input:focus{
+  border-color:#1D9E75;background:#FFFFFF;
+  box-shadow:0 0 0 3px rgba(29,158,117,.15);
+}
+.dk-inp button{
+  padding:7px 14px;border-radius:8px;
+  background:linear-gradient(135deg,#0A6350,#085041);
+  color:#E1F5EE;font-size:12.5px;font-weight:500;font-family:inherit;border:none;
+  box-shadow:0 1px 3px rgba(8,80,65,.35),0 2px 6px rgba(8,80,65,.15);
+  transition:opacity .12s,box-shadow .12s;
+}
+.dk-inp button:hover{opacity:.88;box-shadow:0 2px 6px rgba(8,80,65,.4);}
+
+.dk-dot-anim{width:5px;height:5px;border-radius:50%;background:#1D9E75;animation:dk-bop .9s infinite;}
+.dk-dot-anim:nth-child(2){animation-delay:.2s;}.dk-dot-anim:nth-child(3){animation-delay:.4s;}
+@keyframes dk-bop{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-5px)}}
+
+/* ── Responsive ─────────────────────────────── */
+@media(max-width:680px){
+  .dk-main{grid-template-columns:1fr;}
+  .dk-data{border-left:none;border-top:1px solid var(--sep);}
+  .dk-coach-body{grid-template-columns:1fr;}
+  .dk-ctrl{border-left:none;border-top:1px solid rgba(8,80,65,.12);}
+}
+</style>
+
+<div class="dk"><div class="dk-shell"><div class="dk-app">
+
+  <!-- Topbar -->
+  <header class="dk-topbar">
+    <div class="dk-topbar-title">
+      <i class="ti ti-leaf" style="font-size:16px;color:#9FE1CB;" aria-hidden="true"></i>
+      Duurzame kantine
+    </div>
+    <span class="dk-topbar-sub">Food Governance 2.0</span>
+  </header>
+
+  <!-- Menu selectie -->
+  <section class="dk-menu">
+    <p class="dk-section-title">Huidig menu</p>
+    <div class="dk-pills" id="dk-dishes"></div>
+  </section>
+
+  <!-- Hoofdinhoud -->
+  <div class="dk-main">
+
+    <!-- Links: web + badge + insight -->
+    <div class="dk-web">
+      <div class="dk-canvas-box">
+        <canvas id="dk-canvas" width="320" height="320"></canvas>
+      </div>
+      <div class="dk-badge" id="dk-badge">Selecteer gerechten om het web te starten</div>
+      <div class="dk-insight" id="dk-insight">
+        Voeg gerechten toe — het web laat zien waar jullie kantine sterk in is en waar spanningen zitten.
+      </div>
+    </div>
+
+    <!-- Rechts: scores + commitment -->
+    <div class="dk-data">
+      <div class="dk-scores">
+        <p class="dk-section-title" style="margin-bottom:16px;">Scores per thema</p>
+
+        
+        <div class="dk-bars" id="dk-sf"></div>
+
+    
+        <div class="dk-bars" id="dk-ec"></div>
+      </div>
+
+      
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Coach strip -->
+  <div class="dk-coach">
+    <div class="dk-coach-head">
+      <div class="dk-bot-av">
+        <i class="ti ti-plant" style="font-size:13px;color:#085041;" aria-hidden="true"></i>
+      </div>
+      <span class="dk-coach-name">Duurzaamheidscoach</span>
+      <span class="dk-coach-sub">Vraag me iets over de thema's of je menu</span>
+    </div>
+    <div class="dk-coach-body">
+      <div class="dk-msgs" id="dk-msgs">
+        <div class="dk-msg bot">
+          <div class="dk-av b"><i class="ti ti-plant" style="font-size:9px;" aria-hidden="true"></i></div>
+          <div class="dk-bbl">Hoi! Welk thema wil je verbeteren — of wil je weten wat het web je vertelt?</div>
+        </div>
+      </div>
+      <div class="dk-ctrl">
+        <div>
+          <p class="dk-qlbl">Snelle vragen</p>
+          <div class="dk-qrow">
+            <button class="dk-qbtn" onclick="dkQ('Wat vertelt het web mij?')">Het web</button>
+            <button class="dk-qbtn" onclick="dkQ('Leg me de spanningen uit')">Spanningen</button>
+            <button class="dk-qbtn" onclick="dkQ('Hoe verbeter ik biodiversiteit?')">Biodiversiteit</button>
+            <button class="dk-qbtn" onclick="dkQ('Hoe ver wil ik gaan?')">Commitment</button>
+          </div>
+        </div>
+        <div class="dk-inp">
+          <input type="text" id="dk-input" placeholder="Stel een vraag…"
+            onkeydown="if(event.key==='Enter')dkSend()"/>
+          <button onclick="dkSend()">Stuur</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div></div>
+
+<script>
+(function(){
+// ── Data ──────────────────────────────────────
+// Scores: [gezonder, inclusief, betaalbaar, biodiversiteit, schoner, eerlijkeketen]
+const DISHES={
+  groentecurry:   {label:'Groentecurry',  cls:'g', scores:[80,55,75,65,85,60]},
+  kipschnitzel:   {label:'Kipschnitzel',  cls:'a', scores:[40,85,70,25,30,55]},
+  caesarsalade:   {label:'Caesar salade', cls:'p', scores:[65,60,65,50,60,70]},
+  lasagne:        {label:'Lasagne',        cls:'c', scores:[45,70,60,35,40,50]},
+  linzensoep:     {label:'Linzensoep',     cls:'g', scores:[88,50,85,75,90,72]},
+  seizoenssalade: {label:'Seizoenssalade', cls:'g', scores:[82,50,80,80,88,65]},
+  visbowl:        {label:'Visbowl',        cls:'a', scores:[60,60,65,40,55,60]},
+  falafelwrap:    {label:'Falafelwrap',    cls:'p', scores:[75,65,80,70,80,68]},
+};
+const AXES_FULL  =['Gezonder eten','Inclusief eten','Betaalbaar eten','Biodiversiteit','Slimmer & schoner','Evenwichtige keten'];
+const AXES_SHORT =['Gezonder','Inclusief','Betaalbaar','Biodiversiteit','Schoner','Eerlijk'];
+const BAR_LBL    =['Gezonder','Inclusief','Betaalbaar','Biodiversiteit','Schoner','Eerlijke keten'];
+const BAR_COLOR  =(v)=>v>=70?'#1D9E75':v>=50?'#EF9F27':'#D85A30';
+const NUM_COLOR  =(v)=>v>=70?'#085041':v>=50?'#7A4500':'#6B2510';
+
+const CX=160,CY=160,R=120;
+const ANGLES=AXES_FULL.map((_,i)=>-Math.PI/2+(2*Math.PI*i/6));
+
+let active=new Set(['groentecurry','kipschnitzel']);
+let curPts=null,raf=null,animT0=null;
+
+// ── Canvas ────────────────────────────────────
+function avgScores(){
+  const ids=[...active];
+  return AXES_FULL.map((_,i)=>Math.round(ids.reduce((s,id)=>s+DISHES[id].scores[i],0)/ids.length));
+}
+function toPts(sc){
+  return sc.map((s,i)=>{const r=(s/100)*R;return[CX+r*Math.cos(ANGLES[i]),CY+r*Math.sin(ANGLES[i])];});
+}
+function lerp(a,b,t){return a+(b-a)*t;}
+function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+function lerpPts(a,b,t){return a.map(([x,y],i)=>[lerp(x,b[i][0],t),lerp(y,b[i][1],t)]);}
+
+function webPath(pts){
+  const n=pts.length;let d=`M${pts[0][0]},${pts[0][1]}`;
+  for(let i=0;i<n;i++){
+    const p=pts[i],q=pts[(i+1)%n];
+    const mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2;
+    d+=`Q${mx+(CY-my)*.15},${my-(CX-mx)*.15} ${q[0]},${q[1]}`;
+  }
+  return d+'Z';
+}
+
+function drawLbl(ctx,text,x,y,color){
+  ctx.save();
+  ctx.font='500 10px Inter,-apple-system,sans-serif';
+  ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';
+  const words=text.split(' ');
+  if(words.length===1||ctx.measureText(text).width<80){ctx.fillText(text,x,y);}
+  else{ctx.fillText(words[0],x,y-7.5);ctx.fillText(words.slice(1).join(' '),x,y+7.5);}
+  ctx.restore();
+}
+
+function renderCanvas(pts){
+  const cv=document.getElementById('dk-canvas');
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,320,320);
+  const dark=window.matchMedia('(prefers-color-scheme:dark)').matches;
+  const grid=dark?'rgba(255,255,255,.07)':'rgba(8,80,65,.08)';
+  const lblClr=dark?'#9FE1CB':'#085041';
+
+  // Ringen
+  [.2,.4,.6,.8,1].forEach(f=>{
+    const rp=ANGLES.map(a=>[CX+R*f*Math.cos(a),CY+R*f*Math.sin(a)]);
+    ctx.beginPath();rp.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));
+    ctx.closePath();ctx.strokeStyle=grid;ctx.lineWidth=.8;ctx.stroke();
+  });
+  // Spaaklijnen
+  ANGLES.forEach(a=>{
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.lineTo(CX+R*Math.cos(a),CY+R*Math.sin(a));
+    ctx.strokeStyle=grid;ctx.lineWidth=.8;ctx.stroke();
+  });
+  // Labels
+  AXES_SHORT.forEach((lbl,i)=>{
+    const off=R+16;
+    drawLbl(ctx,lbl,CX+off*Math.cos(ANGLES[i]),CY+off*Math.sin(ANGLES[i]),lblClr);
+  });
+
+  if(!pts||!pts.length)return;
+  const p2d=new Path2D(webPath(pts));
+  ctx.fillStyle='rgba(29,158,117,.13)';ctx.fill(p2d);
+  ctx.strokeStyle='#1D9E75';ctx.lineWidth=2.5;ctx.stroke(p2d);
+  pts.forEach(([x,y])=>{
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle='#1D9E75';ctx.fill();
+    ctx.strokeStyle=dark?'#085041':'#fff';ctx.lineWidth=1.5;ctx.stroke();
+  });
+}
+
+function animTo(target){
+  if(raf)cancelAnimationFrame(raf);
+  const from=curPts||target.map(()=>[CX,CY]);
+  animT0=null;
+  (function step(ts){
+    if(!animT0)animT0=ts;
+    const t=ease(Math.min((ts-animT0)/620,1));
+    curPts=lerpPts(from,target,t);
+    renderCanvas(curPts);
+    if(t<1){raf=requestAnimationFrame(step);}else{curPts=target;}
+  })(performance.now());
+}
+
+// ── Tekst ─────────────────────────────────────
+function mkInsight(sc){
+  const items=sc.map((s,i)=>({lbl:BAR_LBL[i],s}));
+  const sorted=[...items].sort((a,b)=>b.s-a.s);
+  const top=sorted[0],bot=sorted[items.length-1];
+  const avg=Math.round(sc.reduce((a,b)=>a+b)/sc.length);
+  const soc=Math.round((sc[0]+sc[1]+sc[2])/3);
+  const eco=Math.round((sc[3]+sc[4]+sc[5])/3);
+  const gap=Math.abs(soc-eco);
+  if(gap>22&&soc>eco)return`Het menu is sociaal sterk (${soc}/100) maar ecologisch lager (${eco}/100). Die spanning is zichtbaar in het web — dit is precies wat het model inzichtelijk maakt.`;
+  if(gap>22)return`Ecologisch scoort het menu goed (${eco}/100), maar inclusiviteit en betaalbaarheid (${soc}/100) vragen aandacht. Elke verbetering heeft neveneffecten.`;
+  const sp=Math.max(...sc)-Math.min(...sc);
+  if(sp<20&&avg>68)return'Het web is breed en in balans — een zeldzame combinatie. Er is geen duidelijk zwak punt.';
+  if(bot.s<42)return`${bot.lbl} heeft de meeste ruimte en trekt het web naar één kant. Geen fout — maar een bewuste afweging.`;
+  if(top.s>82)return`${top.lbl} is jullie sterkste punt. Kijk ook naar de assen die achterblijven — die spanning vertelt het echte verhaal.`;
+  if(avg>65)return`Een breed web — het menu is al behoorlijk duurzaam. ${bot.lbl} biedt nog de meeste ruimte.`;
+  return`Gemiddeld ${avg}/100. ${top.lbl} is sterk, ${bot.lbl} heeft de meeste ruimte.`;
+}
+
+function mkBadge(sc){
+  const soc=Math.round((sc[0]+sc[1]+sc[2])/3);
+  const eco=Math.round((sc[3]+sc[4]+sc[5])/3);
+  const sp=Math.max(...sc)-Math.min(...sc);
+  const avg=Math.round(sc.reduce((a,b)=>a+b)/sc.length);
+  if(Math.abs(soc-eco)>22)return'Sociaal vs. ecologisch — een zichtbare spanning';
+  if(sp<20&&avg>68)return'Een vol, evenwichtig web';
+  if(sp<20)return'Een compact web — veel groeipotentieel';
+  if(sp>=35)return'Een onregelmatig web — bewuste keuzes zichtbaar';
+  return'Een groeiend web';
+}
+
+// ── Bars ──────────────────────────────────────
+function renderBars(sc){
+  function fill(el,indices){
+    el.innerHTML='';
+    indices.forEach(i=>{
+      const row=document.createElement('div');row.className='dk-bar-row';
+      const lbl=document.createElement('span');lbl.className='dk-bar-lbl';lbl.textContent=BAR_LBL[i];
+      const track=document.createElement('div');track.className='dk-bar-track';
+      const bar=document.createElement('div');bar.className='dk-bar-fill';
+      bar.style.cssText=`width:${sc[i]}%;background:${BAR_COLOR(sc[i])};`;
+      track.appendChild(bar);
+      const num=document.createElement('span');num.className='dk-bar-num';
+      num.style.color=BAR_COLOR(sc[i]);num.textContent=sc[i];
+      row.append(lbl,track,num);el.appendChild(row);
+    });
+  }
+  fill(document.getElementById('dk-sf'),[0,1,2]);
+  fill(document.getElementById('dk-ec'),[3,4,5]);
+}
+
+// ── Refresh ───────────────────────────────────
+function refresh(){
+  Object.keys(DISHES).forEach(id=>{
+    const el=document.getElementById('dk-pill-'+id);
+    if(el)el.className='dk-pill '+(active.has(id)?DISHES[id].cls:'off');
+  });
+  if(!active.size)return;
+  const sc=avgScores();
+  animTo(toPts(sc));
+  document.getElementById('dk-badge').textContent=mkBadge(sc);
+  document.getElementById('dk-insight').textContent=mkInsight(sc);
+  renderBars(sc);
+}
+
+// ── Dishes ────────────────────────────────────
+(function buildDishes(){
+  const wrap=document.getElementById('dk-dishes');
+  Object.keys(DISHES).forEach(id=>{
+    const btn=document.createElement('button');
+    btn.className='dk-pill '+(active.has(id)?DISHES[id].cls:'off');
+    btn.id='dk-pill-'+id;btn.textContent=DISHES[id].label;
+    btn.onclick=()=>{
+      if(active.has(id)){if(active.size>1)active.delete(id);}else active.add(id);
+      refresh();
+      const sc=avgScores();
+      const soc=Math.round((sc[0]+sc[1]+sc[2])/3);
+      const eco=Math.round((sc[3]+sc[4]+sc[5])/3);
+      const bot=[...sc.map((s,i)=>({lbl:BAR_LBL[i],s}))].sort((a,b)=>a.s-b.s)[0];
+      const d=Math.abs(soc-eco);
+      let msg;
+      if(d>22&&soc>eco)msg=`Menu aangepast. Sociaal scoort nu ${soc}, ecologisch ${eco}. Is die spanning de juiste afweging voor jullie organisatie?`;
+      else if(d>22)msg=`Menu aangepast. Ecologisch scoort nu ${eco}, sociaal ${soc}. Wil je weten hoe je beide kanten kunt versterken?`;
+      else msg=`Menu aangepast. ${bot.lbl} scoort het laagst (${bot.s}/100). Wil je daar iets mee, of is dat een bewuste keuze?`;
+      addMsg(msg,'bot');
+    };
+    wrap.appendChild(btn);
+  });
+})();
+
+// ── Chatbot ───────────────────────────────────
+const R_MAP={
+  web:[
+    'Het web toont hoe jullie menu scoort op 6 Food Governance 2.0 thema\'s, verdeeld in Social Foundation en Ecological Ceiling.',
+    'Een onregelmatige of kleine vorm is niet fout. De spanning tussen de assen is precies wat dit model zichtbaar wil maken — er bestaat geen ideale kantine.'
+  ],
+  spanningen:[
+    'De 6 thema\'s staan bewust in spanning. Focus je op biodiversiteit? Dan stijgen de kosten en daalt de inclusiviteit. Kies je voor betaalbaarheid? Dan komt de eerlijke keten onder druk.',
+    'Dit is een feature, geen bug. Elke interventie heeft neveneffecten — het web maakt die afwegingen zichtbaar zodat je er bewust over kunt praten.'
+  ],
+  gezonder:[
+    'Gezonder eten gaat over voedingswaarde én kennis over voedsel. Linzensoep, groentecurry en seizoenssalade scoren hier het sterkst.',
+    'Let op: gezonder eten is niet automatisch inclusiever of goedkoper. Dat is een klassieke spanning in dit model.'
+  ],
+  inclusief:[
+    'Inclusief eten betekent aansluiten op medische, religieuze en culturele behoeften van de hele doelgroep.',
+    'Vertrouwde gerechten scoren hier hoog — ze zijn bekend voor een brede groep. Minder bekende plantaardige opties scoren juist lager op inclusiviteit.'
+  ],
+  betaalbaar:[
+    'Betaalbaarheid gaat over de prijs voor de consument én de fysieke beschikbaarheid. Linzensoep en falafelwrap scoren hier sterk.',
+    'Goedkoper maken gaat vaak ten koste van biodiversiteit of eerlijke ketenprijzen — de spanning die dit model inzichtelijk maakt.'
+  ],
+  schoner:[
+    'Slimmer & schoner gaat over CO₂, water, energie en chemische middelen. Plantaardige gerechten scoren hier gemiddeld 40-60 punten hoger.',
+    'Kleine stap: vervang één vleesgerecht door een plantaardig alternatief. Dat verschuift het web direct zichtbaar.'
+  ],
+  biodiversiteit:[
+    'Biodiversiteit draait om landbouwgronden, dierenwelzijn en natuur. Seizoensgebonden en lokale ingrediënten scoren hier het sterkst.',
+    'Meer biodiversiteit verbetert gezondheid én uitstoot — maar verslechtert doorgaans betaalbaarheid en inclusiviteit. Die spanning is een feature.'
+  ],
+  eerlijk:[
+    'Evenwichtige keten gaat over eerlijke prijzen in alle schakels — True Pricing, geen dominantie door één partij.',
+    'Een eerlijkere keten kost meer en drukt de betaalbaarheid voor de consument. Beide zijn legitiem — het gaat om de bewuste afweging die jullie organisatie maakt.'
+  ],
+  commitment:[
+    'Er is geen perfecte uitkomst — het gaat om wat past bij jullie organisatie en wat haalbaar is.',
+    'Klein: één gerecht aanpassen dit kwartaal. Middel: één thema verbeteren met gerichte inkoop. Groot: het hele menu herbouwen met seizoensrotatie en inkoopkoppeling.'
+  ],
+  default:[
+    'Op basis van je huidige menu zie ik de meeste ruimte bij de lagere assen. Wil je dieper ingaan op een sociaal thema (gezonder, inclusief, betaalbaar) of een ecologisch thema?'
+  ],
+};
+
+function getKey(t){
+  const s=t.toLowerCase();
+  if(s.includes('web')||s.includes('vorm')||s.includes('vertelt'))return'web';
+  if(s.includes('span')||s.includes('tegenwer')||s.includes('neveneffect'))return'spanningen';
+  if(s.includes('gezond')||s.includes('voeding'))return'gezonder';
+  if(s.includes('inclus')||s.includes('cultureel')||s.includes('religie'))return'inclusief';
+  if(s.includes('betaal')||s.includes('goedkoop')||s.includes('kosten'))return'betaalbaar';
+  if(s.includes('schoon')||s.includes('slimmer')||s.includes('co2')||s.includes('co₂')||s.includes('uitstoot'))return'schoner';
+  if(s.includes('bio')||s.includes('diversiteit')||s.includes('dierenwelzijn')||s.includes('natuur'))return'biodiversiteit';
+  if(s.includes('eerlijk')||s.includes('keten')||s.includes('true pric'))return'eerlijk';
+  if(s.includes('commit')||s.includes('hoe ver')||s.includes('hoever'))return'commitment';
+  return'default';
+}
+
+function addMsg(text,role){
+  const wrap=document.getElementById('dk-msgs');
+  const d=document.createElement('div');d.className='dk-msg '+role;
+  const av=document.createElement('div');av.className='dk-av '+(role==='bot'?'b':'u');
+  av.innerHTML=`<i class="ti ti-${role==='bot'?'plant':'user'}" style="font-size:9px;" aria-hidden="true"></i>`;
+  const bbl=document.createElement('div');bbl.className='dk-bbl';bbl.textContent=text;
+  d.append(av,bbl);wrap.appendChild(d);wrap.scrollTop=wrap.scrollHeight;
+}
+
+function showTyping(){
+  const wrap=document.getElementById('dk-msgs');
+  const d=document.createElement('div');d.className='dk-msg bot';d.id='dk-typing';
+  d.innerHTML='<div class="dk-av b"><i class="ti ti-plant" style="font-size:9px;"></i></div>'
+    +'<div class="dk-bbl"><span style="display:flex;gap:4px;align-items:center;height:16px;">'
+    +'<span class="dk-dot-anim"></span><span class="dk-dot-anim"></span><span class="dk-dot-anim"></span>'
+    +'</span></div>';
+  wrap.appendChild(d);wrap.scrollTop=wrap.scrollHeight;
+}
+
+async function botReply(text){
+  showTyping();
+  const rs=R_MAP[getKey(text)];
+  await new Promise(ok=>setTimeout(ok,560));
+  document.getElementById('dk-typing')?.remove();
+  for(let i=0;i<rs.length;i++){
+    if(i>0)await new Promise(ok=>setTimeout(ok,360));
+    addMsg(rs[i],'bot');
+  }
+}
+
+window.dkQ=function(t){addMsg(t,'user');botReply(t);};
+window.dkSend=function(){
+  const el=document.getElementById('dk-input');
+  const v=el.value.trim();if(!v)return;
+  addMsg(v,'user');el.value='';botReply(v);
+};
+
+refresh();
+})();
+</script>
